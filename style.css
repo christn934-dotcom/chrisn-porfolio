@@ -1,0 +1,270 @@
+/* =========================================================
+   THEME TOKENS — change these and the whole site updates.
+   Dark mode just overrides the same variable names, so the
+   rest of the CSS never needs an if/else.
+   ========================================================= */
+:root {
+    --bg: #F7F5FB;
+    --surface: #FFFFFF;
+    --text: #1A1230;
+    --muted: #5B5470;
+    --border-soft: rgba(26, 18, 48, 0.08);
+
+    /* Signature gradient: purple -> magenta -> red */
+    --grad-1: #8B2FF7;
+    --grad-2: #D6249F;
+    --grad-3: #FF3B5C;
+    --gradient: linear-gradient(135deg, var(--grad-1), var(--grad-2) 55%, var(--grad-3));
+
+    --radius: 16px;
+    --transition: 220ms ease;
+
+    /* Offline system font stacks — no network requests */
+    --font-display: -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    --font-body: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    --font-mono: ui-monospace, "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+}
+
+[data-theme="dark"] {
+    --bg: #0D0815;
+    --surface: #1B1229;
+    --text: #F1ECFB;
+    --muted: #9C93B5;
+    --border-soft: rgba(255, 255, 255, 0.06);
+}
+
+/* ========== LOADER ==========
+   Full-screen overlay with a spinning ring that uses the
+   gradient as its two visible border edges. script.js adds
+   .hidden once the page (and images) finish loading. */
+#loader {
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg);
+    transition: opacity 400ms ease, visibility 400ms ease;
+}
+#loader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+.loader-ring {
+    position: relative;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    border: 3px solid var(--border-soft);
+    border-top-color: var(--grad-1);
+    border-right-color: var(--grad-3);
+    animation: spin 800ms linear infinite;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.loader-logo {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    object-fit: cover;
+    animation: spin 800ms linear infinite reverse;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ========== RESET & BASE ========== */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    line-height: 1.6;
+    transition: background var(--transition), color var(--transition);
+}
+img { max-width: 100%; display: block; }
+a { text-decoration: none; color: inherit; }
+h1, h2, h3 { font-family: var(--font-display); font-weight: 700; line-height: 1.2; }
+h2 { font-size: clamp(1.5rem, 3vw, 2rem); margin-bottom: 2rem; }
+.eyebrow { font-family: var(--font-mono); font-size: 0.8rem; color: var(--grad-2); display: block; margin-bottom: 0.4rem; }
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+}
+a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible {
+    outline: 2px solid var(--grad-2);
+    outline-offset: 3px;
+}
+
+/* ========== BUTTONS ========== */
+.btn {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    border-radius: 999px;
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    border: none;
+    cursor: pointer;
+    transition: transform var(--transition), box-shadow var(--transition);
+}
+.btn-primary { background: var(--gradient); color: #fff; }
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 22px rgba(214, 36, 159, 0.35); }
+.btn-ghost { border: 1px solid var(--border-soft); color: var(--text); background: none; }
+.btn-ghost:hover { border-color: var(--grad-2); color: var(--grad-2); }
+
+/* ========== HEADER ========== */
+header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    padding: 1rem 5%;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border-soft);
+}
+.logo { display: flex; align-items: center; gap: 0.6rem; }
+.logoimg img { width: 30px; height: 30px; border-radius: 8px; }
+.logotext { font-family: var(--font-display); font-weight: 700; }
+.links { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+.links a {
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    color: var(--muted);
+    transition: color var(--transition);
+}
+.links a:hover { color: var(--grad-2); }
+
+/* Theme toggle switch */
+.theme-toggle { background: none; border: none; cursor: pointer; }
+.toggle-track {
+    display: block;
+    width: 48px;
+    height: 26px;
+    border-radius: 999px;
+    background: var(--border-soft);
+    padding: 3px;
+}
+.toggle-thumb {
+    display: block;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--gradient);
+    transition: transform var(--transition);
+}
+[data-theme="dark"] .toggle-thumb { transform: translateX(22px); }
+
+.hero {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 3rem;
+    flex-wrap: wrap-reverse;
+    padding: 4rem 5%;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+.heroText { max-width: 540px; }
+.heroText h1 { font-size: clamp(2rem, 5vw, 3rem); margin-bottom: 1rem; }
+.heroLead { color: var(--muted); margin-bottom: 1.5rem; }
+.heroCtas { display: flex; gap: 1rem; flex-wrap: wrap; }
+.heroImage-frame {
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    padding: 4px;
+    background: var(--gradient);
+    margin-inline: auto;
+}
+.heroImage-frame img {
+    width: 100%; height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid var(--bg);
+}
+
+/* ========== GRADIENT-BORDER CARDS ==========
+   The trick: two background layers on .card — one fills the
+   inside (padding-box), one paints the gradient (border-box).
+   A transparent border reveals a thin ring of that gradient. */
+.skills, .projects { padding: 3rem 5%; max-width: 1100px; margin: 0 auto; }
+.cards, .pros {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.4rem;
+}
+.card {
+    background: linear-gradient(var(--surface), var(--surface)) padding-box,
+                var(--gradient) border-box;
+    border: 1px solid transparent;
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    opacity: 0.6;
+    transform: translateY(20px);
+    transition: transform 450ms ease, opacity 450ms ease, box-shadow var(--transition);
+}
+.card.in-view { opacity: 1; transform: translateY(0); }
+.cards .card:nth-child(2) { transition-delay: 80ms; }
+.cards .card:nth-child(3) { transition-delay: 160ms; }
+.cards .card:nth-child(4) { transition-delay: 240ms; }
+.cards .card:nth-child(5) { transition-delay: 320ms; }
+.card:hover { transform: translateY(-6px); box-shadow: 0 14px 34px rgba(214, 36, 159, 0.25); }
+.card img { width: 38px; height: 38px; margin-bottom: 0.8rem; }
+.card h3 { font-size: 1rem; margin-bottom: 0.4rem; }
+.card p { color: var(--muted); font-size: 0.9rem; }
+
+.pro {
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: var(--surface);
+    border: 1px solid var(--border-soft);
+    transition: transform var(--transition), border-color var(--transition);
+}
+.pro:hover { transform: translateY(-5px); border-color: var(--grad-2); }
+.pro img { aspect-ratio: 16/10; object-fit: cover; width: 100%; }
+.pro p { padding: 0.9rem 1rem 0.4rem; font-family: var(--font-mono); font-size: 0.85rem; }
+
+.pro-links { display: flex; gap: 0.6rem; padding: 0 1rem 1rem; }
+.btn-icon {
+    flex: 1;
+    text-align: center;
+    padding: 0.5rem 0.8rem;
+    border-radius: 8px;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    border: 1px solid var(--border-soft);
+    color: var(--text);
+    transition: border-color var(--transition), color var(--transition), transform var(--transition);
+}
+.btn-icon:hover { border-color: var(--grad-2); color: var(--grad-2); transform: translateY(-2px); }
+.btn-icon-fill { background: var(--gradient); color: #fff; border: none; }
+.btn-icon-fill:hover { color: #fff; opacity: 0.9; }
+
+
+.resume { text-align: center; padding: 3rem 5%; }
+.resume p { color: var(--muted); margin-bottom: 1rem; }
+
+.comment { max-width: 560px; margin: 0 auto; padding: 3rem 5% 5rem; text-align: center; }
+.contact-form { display: flex; flex-direction: column; gap: 1rem; text-align: left; margin-top: 1.2rem; }
+.contact-form input, .contact-form textarea {
+    background: var(--surface);
+    border: 1px solid var(--border-soft);
+    border-radius: 10px;
+    padding: 0.85rem 1rem;
+    color: var(--text);
+    font-family: var(--font-body);
+}
+.contact-form textarea { min-height: 130px; resize: vertical; }
+.contact-form input:focus, .contact-form textarea:focus { border-color: var(--grad-2); outline: none; }
+.contact-form button { align-self: flex-start; }
+
+/* ========== FOOTER ========== */
+footer { text-align: center; padding: 1.5rem 5%; color: var(--muted); font-size: 0.85rem; border-top: 1px solid var(--border-soft); }
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 700px) {
+    .hero { text-align: center; }
+    .heroCtas { justify-content: center; }
+}

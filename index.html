@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NGWA Christ-Noel Azinwi Fuh | Portfolio</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="loader">
+    <div class="loader-ring">
+        <img src="images/PS.png" alt="Logo" class="loader-logo">
+    </div>
+</div>
+
+<header>
+    <div class="logo">
+        <span class="logoimg"><img src="images/PS.png" alt="Logo"></span>
+        <p class="logotext">My Portfolio</p>
+    </div>
+
+    <nav class="links">
+        <a href="#about">About</a>
+        <a href="#projects">Projects</a>
+        <a href="#experiences">Experiences</a>
+        <a href="#contact">Contact</a>
+    </nav>
+
+    <button id="themeToggle" class="theme-toggle" aria-label="Toggle dark mode" aria-pressed="false">
+        <span class="toggle-track">
+            <span class="toggle-thumb"></span>
+        </span>
+    </button>
+</header>
+
+<section class="hero" id="about">
+    <div class="heroText">
+        <p class="eyebrow">// Hello, I'm</p>
+        <h1>NGWA Christ-Noel Azinwi Fuh</h1>
+        <p class="heroLead">I am passionate about web development and enjoy building responsive websites and solving real-world problems through code.</p>
+        <div class="heroCtas">
+            <a href="#projects" class="btn btn-primary">View Projects</a>
+            <a href="#contact" class="btn btn-ghost">Get In Touch</a>
+        </div>
+    </div>
+    <div class="heroImage">
+        <div class="heroImage-frame">
+            <img src="images/me1.png" alt="Portrait of NGWA Christ-Noel Azinwi Fuh">
+        </div>
+    </div>
+</section>
+
+<section class="skills" id="experiences">
+    <p class="eyebrow">// What I do</p>
+    <h2>Skills &amp; Experience</h2>
+
+    <div class="cards">
+        <div class="card">
+            <img src="images/html.png" alt="Frontend">
+            <h3>Frontend Development</h3>
+            <p>Skilled in HTML, CSS, and JavaScript, building responsive, modern, user-friendly websites.</p>
+        </div>
+        <div class="card">
+            <img src="images/php.png" alt="PHP">
+            <h3>Backend Development</h3>
+            <p>Experienced in PHP backend development, building dynamic web applications and server-side logic.</p>
+        </div>
+        <div class="card">
+            <img src="images/sql.png" alt="Database">
+            <h3>Database Administration</h3>
+            <p>Work as a database administrator and analyst, designing schemas and writing reliable queries.</p>
+        </div>
+        <div class="card">
+            <img src="images/gh.png" alt="Team collaboration">
+            <h3>Team Collaboration</h3>
+            <p>Worked in cross-functional teams with companies like MiraEdge and Solution.</p>
+        </div>
+        <div class="card">
+            <img src="images/PS.png" alt="Graphic design">
+            <h3>Graphic Design</h3>
+            <p>Also picked up graphic design — building logos, editing images, producing polished visuals.</p>
+        </div>
+    </div>
+</section>
+
+<section class="projects" id="projects">
+    <p class="eyebrow">// Selected work</p>
+    <h2>Projects</h2>
+
+    <div class="pros">
+        <div class="pro">
+            <img src="images/flight.png" alt="Flight booking webpage">
+            <p>Flight Webpage</p>
+            <div class="pro-links">
+                <a href="https://github.com/christn934-dotcom/flight.git" class="btn-icon" target="_blank" rel="noopener">GitHub</a>
+                <a href="#" class="btn-icon btn-icon-fill" target="_blank" rel="noopener">Live Preview</a>
+            </div>
+        </div>
+        <div class="pro">
+            <img src="images/todolist.png" alt="To-do list app with popup modal">
+            <p>To-Do List &amp; Popup Modal</p>
+            <div class="pro-links">
+                <a href="https://github.com/christn934-dotcom/to-do-list" class="btn-icon" target="_blank" rel="noopener">GitHub</a>
+                <a href="#" class="btn-icon btn-icon-fill" target="_blank" rel="noopener">Live Preview</a>
+            </div>
+        </div>
+        <div class="pro">
+            <img src="images/porfolio.jpeg" alt="This portfolio site">
+            <p>Portfolio</p>
+            <div class="pro-links">
+                <a href="#" class="btn-icon" target="_blank" rel="noopener">GitHub</a>
+                <a href="#" class="btn-icon btn-icon-fill" target="_blank" rel="noopener">Live Preview</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="resume">
+    <p>Want the full picture?</p>
+    <a href="resume.pdf" download class="btn btn-primary">Download Resume</a>
+</section>
+
+<section class="comment" id="contact">
+    <p class="eyebrow">// Say hello</p>
+    <h2>Contact Me</h2>
+
+    <form class="contact-form" action="https://formspree.io/f/xaqrabqw" method="POST">
+        <input type="text" name="name" placeholder="Your Name" required>
+        <input type="email" name="email" placeholder="Your Email" required>
+        <textarea name="message" placeholder="Your message" required></textarea>
+        <button type="submit" class="btn btn-primary">Send Message</button>
+    </form>
+</section>
+
+<footer>
+    <p>&copy; <span id="year"></span> NGWA Christ-Noel Azinwi Fuh</p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
