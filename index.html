@@ -37,11 +37,26 @@
     </button>
 </header>
 
+<!-- Password Gate Modal -->
+<div id="authModal" class="auth-modal">
+    <div class="auth-modal-box">
+        <h3>🔒 Admin Access</h3>
+        <p>Enter your password to manage the portfolio</p>
+        <input type="password" id="authPassword" placeholder="Password" autofocus>
+        <p id="authError" class="auth-error" style="display:none;">Incorrect password. Try again.</p>
+        <div class="auth-modal-buttons">
+            <button id="authSubmit" class="btn btn-primary">Unlock</button>
+            <button id="authCancel" class="btn btn-ghost">Cancel</button>
+        </div>
+    </div>
+</div>
+
 <!-- Admin Sidebar -->
 <aside id="adminSidebar" class="sidebar">
     <div class="sidebar-header">
         <h3>Admin Panel</h3>
         <button id="sidebarClose" class="sidebar-close">&times;</button>
+        <button id="adminLogout" class="admin-logout" title="Lock admin panel">🔒 Lock</button>
     </div>
 
     <div class="sidebar-section">

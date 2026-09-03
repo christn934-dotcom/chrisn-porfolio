@@ -3,6 +3,16 @@ window.addEventListener('load', () => {
     setTimeout(() => loader.classList.add('hidden'), 3500);
 });
 
+// ============ ADMIN AUTH ============
+const ADMIN_HASH = 'db08971453699fce30e520df715bfaef75cbd249df0fbbb20c7a341e719454ea';
+let adminUnlocked = sessionStorage.getItem('adminUnlocked') === 'true';
+
+async function sha256(str) {
+    const buffer = new TextEncoder().encode(str);
+    const hash = await crypto.subtle.digest('SHA-256', buffer);
+    return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
 // ============ SIDEBAR FUNCTIONALITY ============
 const sidebarToggle = document.getElementById('sidebarToggle');
 const sidebar = document.getElementById('adminSidebar');
@@ -12,8 +22,13 @@ const addProjectForm = document.getElementById('addProjectForm');
 const addSkillForm = document.getElementById('addSkillForm');
 const projectList = document.getElementById('projectList');
 const skillList = document.getElementById('skillList');
+const authModal = document.getElementById('authModal');
+const authPassword = document.getElementById('authPassword');
+const authSubmit = document.getElementById('authSubmit');
+const authCancel = document.getElementById('authCancel');
+const authError = document.getElementById('authError');
+const adminLogout = document.getElementById('adminLogout');
 
-// Toggle sidebar
 function openSidebar() {
     sidebar.classList.add('open');
     sidebarOverlay.classList.add('visible');
@@ -24,9 +39,58 @@ function closeSidebar() {
     sidebarOverlay.classList.remove('visible');
 }
 
-sidebarToggle.addEventListener('click', openSidebar);
+function showAuthModal() {
+    authModal.classList.add('visible');
+    authPassword.value = '';
+    authError.style.display = 'none';
+    setTimeout(() => authPassword.focus(), 100);
+}
+
+function hideAuthModal() {
+    authModal.classList.remove('visible');
+    authPassword.value = '';
+    authError.style.display = 'none';
+}
+
+async function attemptLogin() {
+    const input = authPassword.value;
+    const hash = await sha256(input);
+    if (hash === ADMIN_HASH) {
+        adminUnlocked = true;
+        sessionStorage.setItem('adminUnlocked', 'true');
+        hideAuthModal();
+        openSidebar();
+    } else {
+        authError.style.display = 'block';
+        authPassword.value = '';
+        authPassword.focus();
+    }
+}
+
+function logoutAdmin() {
+    adminUnlocked = false;
+    sessionStorage.removeItem('adminUnlocked');
+    closeSidebar();
+}
+
+sidebarToggle.addEventListener('click', () => {
+    if (adminUnlocked) {
+        openSidebar();
+    } else {
+        showAuthModal();
+    }
+});
+
 sidebarClose.addEventListener('click', closeSidebar);
 sidebarOverlay.addEventListener('click', closeSidebar);
+authSubmit.addEventListener('click', attemptLogin);
+authCancel.addEventListener('click', hideAuthModal);
+adminLogout.addEventListener('click', logoutAdmin);
+
+authPassword.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') attemptLogin();
+    if (e.key === 'Escape') hideAuthModal();
+});
 
 // Load saved data from localStorage
 function loadProjects() {
