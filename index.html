@@ -32,7 +32,51 @@
             <span class="toggle-thumb"></span>
         </span>
     </button>
+    <button id="sidebarToggle" class="sidebar-toggle" aria-label="Toggle admin sidebar">
+        ☰
+    </button>
 </header>
+
+<!-- Admin Sidebar -->
+<aside id="adminSidebar" class="sidebar">
+    <div class="sidebar-header">
+        <h3>Admin Panel</h3>
+        <button id="sidebarClose" class="sidebar-close">&times;</button>
+    </div>
+
+    <div class="sidebar-section">
+        <h4>Add New Project</h4>
+        <form id="addProjectForm" class="sidebar-form">
+            <input type="text" id="projectTitle" placeholder="Project Title" required>
+            <input type="text" id="projectDescription" placeholder="Description">
+            <input type="text" id="projectGithub" placeholder="GitHub URL">
+            <input type="text" id="projectLive" placeholder="Live Preview URL">
+            <input type="file" id="projectImage" accept="image/*">
+            <button type="submit" class="btn btn-primary">Add Project</button>
+        </form>
+    </div>
+
+    <div class="sidebar-section">
+        <h4>Add New Skill</h4>
+        <form id="addSkillForm" class="sidebar-form">
+            <input type="text" id="skillTitle" placeholder="Skill Title" required>
+            <input type="text" id="skillDescription" placeholder="Description">
+            <input type="file" id="skillImage" accept="image/*">
+            <button type="submit" class="btn btn-primary">Add Skill</button>
+        </form>
+    </div>
+
+    <div class="sidebar-section">
+        <h4>Manage Content</h4>
+        <div id="projectList" class="manage-list">
+            <p class="muted">Your projects will appear here</p>
+        </div>
+        <div id="skillList" class="manage-list">
+            <p class="muted">Your skills will appear here</p>
+        </div>
+    </div>
+</aside>
+<div id="sidebarOverlay" class="sidebar-overlay"></div>
 
 <section class="hero" id="about">
     <div class="heroText">
