@@ -321,3 +321,137 @@ if (contactForm) {
         }
     });
 }
+
+// ============ RESUME PDF GENERATOR ============
+function generateResume() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    const name = 'NGWA Christ-Noel Azinwi Fuh';
+    const tagline = 'Web Developer';
+    const year = new Date().getFullYear();
+
+    // --- Header ---
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(22);
+    doc.setTextColor(139, 47, 247); // purple
+    doc.text(name, 20, 25);
+
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(11);
+    doc.setTextColor(91, 84, 112);
+    doc.text(tagline, 20, 33);
+
+    // Divider line
+    doc.setDrawColor(214, 36, 159);
+    doc.setLineWidth(0.8);
+    doc.line(20, 37, 190, 37);
+
+    // --- Summary ---
+    let y = 45;
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(13);
+    doc.setTextColor(139, 47, 247);
+    doc.text('Professional Summary', 20, y);
+    y += 7;
+
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(10);
+    doc.setTextColor(26, 18, 48);
+    const summary = 'Passionate web developer skilled in building responsive, modern websites and solving real-world problems through code. Experienced in frontend (HTML, CSS, JavaScript), backend (PHP), database administration, and graphic design. A strong team player who has collaborated with companies like MiraEdge and Solution.';
+    const summaryLines = doc.splitTextToSize(summary, 170);
+    doc.text(summaryLines, 20, y);
+    y += summaryLines.length * 5 + 6;
+
+    // --- Skills ---
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(13);
+    doc.setTextColor(139, 47, 247);
+    doc.text('Skills & Experience', 20, y);
+    y += 8;
+
+    doc.setFontSize(10);
+    doc.setTextColor(26, 18, 48);
+
+    const staticSkills = [
+        { title: 'Frontend Development', desc: 'HTML, CSS, JavaScript — responsive, modern, user-friendly websites.' },
+        { title: 'Backend Development', desc: 'PHP backend development, dynamic web applications, server-side logic.' },
+        { title: 'Database Administration', desc: 'Schema design, reliable queries, data analysis.' },
+        { title: 'Team Collaboration', desc: 'Cross-functional teams at MiraEdge and Solution.' },
+        { title: 'Graphic Design', desc: 'Logos, image editing, polished visuals.' },
+    ];
+
+    const dynamicSkills = loadSkills();
+    const allSkills = [
+        ...staticSkills,
+        ...dynamicSkills.map(s => ({ title: s.title, desc: s.description || '' }))
+    ];
+
+    allSkills.forEach(skill => {
+        if (y > 270) { doc.addPage(); y = 20; }
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(214, 36, 159);
+        doc.text('▸ ' + skill.title, 22, y);
+        y += 5;
+        doc.setFont('helvetica', 'normal');
+        doc.setTextColor(60, 60, 60);
+        const descLines = doc.splitTextToSize(skill.desc, 165);
+        doc.text(descLines, 26, y);
+        y += descLines.length * 4.5 + 4;
+    });
+
+    y += 2;
+
+    // --- Projects ---
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(13);
+    doc.setTextColor(139, 47, 247);
+    doc.text('Projects', 20, y);
+    y += 8;
+
+    doc.setFontSize(10);
+
+    const staticProjects = [
+        { title: 'Flight Webpage', github: 'https://github.com/christn934-dotcom/flight.git' },
+        { title: 'To-Do List & Popup Modal', github: 'https://github.com/christn934-dotcom/to-do-list' },
+        { title: 'Portfolio', github: 'https://github.com/christn934-dotcom/chrisn-porfolio' },
+    ];
+
+    const dynamicProjects = loadProjects();
+    const allProjects = [
+        ...staticProjects,
+        ...dynamicProjects.map(p => ({ title: p.title, github: p.github || '' }))
+    ];
+
+    allProjects.forEach(project => {
+        if (y > 270) { doc.addPage(); y = 20; }
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(26, 18, 48);
+        doc.text('▸ ' + project.title, 22, y);
+        y += 5;
+        if (project.github) {
+            doc.setFont('helvetica', 'normal');
+            doc.setFontSize(9);
+            doc.setTextColor(91, 84, 112);
+            doc.text(project.github, 26, y);
+            doc.setFontSize(10);
+            y += 5;
+        }
+        y += 3;
+    });
+
+    // --- Footer ---
+    const pageCount = doc.internal.getNumberOfPages();
+    for (let i = 1; i <= pageCount; i++) {
+        doc.setPage(i);
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(8);
+        doc.setTextColor(150, 150, 150);
+        doc.text('Generated from portfolio • ' + year, 20, 290);
+        doc.text('Page ' + i + ' of ' + pageCount, 175, 290);
+    }
+
+    doc.save('NGWA_Christ-Noel_Resume.pdf');
+}
+
+document.getElementById('downloadResume').addEventListener('click', generateResume);
