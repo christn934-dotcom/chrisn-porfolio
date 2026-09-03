@@ -163,7 +163,10 @@ function renderManageLists() {
         projectList.innerHTML = projects.map(p => `
             <div class="manage-item">
                 <span>${p.title}</span>
-                <button class="delete-btn" onclick="deleteProject('${p.id}')">&times;</button>
+                <div class="manage-actions">
+                    <button class="edit-btn" onclick="editProject('${p.id}')" title="Edit">✎</button>
+                    <button class="delete-btn" onclick="deleteProject('${p.id}')">&times;</button>
+                </div>
             </div>
         `).join('');
     }
@@ -174,7 +177,10 @@ function renderManageLists() {
         skillList.innerHTML = skills.map(s => `
             <div class="manage-item">
                 <span>${s.title}</span>
-                <button class="delete-btn" onclick="deleteSkill('${s.id}')">&times;</button>
+                <div class="manage-actions">
+                    <button class="edit-btn" onclick="editSkill('${s.id}')" title="Edit">✎</button>
+                    <button class="delete-btn" onclick="deleteSkill('${s.id}')">&times;</button>
+                </div>
             </div>
         `).join('');
     }
@@ -199,6 +205,56 @@ window.deleteSkill = function(id) {
     renderManageLists();
 };
 
+// Edit state
+let editingProjectId = null;
+let editingSkillId = null;
+
+window.editProject = function(id) {
+    const projects = loadProjects();
+    const project = projects.find(p => p.id === id);
+    if (!project) return;
+
+    editingProjectId = id;
+    document.getElementById('projectTitle').value = project.title || '';
+    document.getElementById('projectDescription').value = project.description || '';
+    document.getElementById('projectGithub').value = project.github || '';
+    document.getElementById('projectLive').value = project.live || '';
+
+    // Update button label
+    addProjectForm.querySelector('button[type="submit"]').textContent = 'Update Project';
+    addProjectForm.querySelector('button[type="submit"]').classList.add('btn-update');
+};
+
+window.editSkill = function(id) {
+    const skills = loadSkills();
+    const skill = skills.find(s => s.id === id);
+    if (!skill) return;
+
+    editingSkillId = id;
+    document.getElementById('skillTitle').value = skill.title || '';
+    document.getElementById('skillDescription').value = skill.description || '';
+
+    // Update button label
+    addSkillForm.querySelector('button[type="submit"]').textContent = 'Update Skill';
+    addSkillForm.querySelector('button[type="submit"]').classList.add('btn-update');
+};
+
+function resetProjectForm() {
+    editingProjectId = null;
+    addProjectForm.reset();
+    const btn = addProjectForm.querySelector('button[type="submit"]');
+    btn.textContent = 'Add Project';
+    btn.classList.remove('btn-update');
+}
+
+function resetSkillForm() {
+    editingSkillId = null;
+    addSkillForm.reset();
+    const btn = addSkillForm.querySelector('button[type="submit"]');
+    btn.textContent = 'Add Skill';
+    btn.classList.remove('btn-update');
+}
+
 // Add project form submission
 addProjectForm.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -212,19 +268,35 @@ addProjectForm.addEventListener('submit', (e) => {
 
     function saveProject(imageDataUrl) {
         const projects = loadProjects();
-        const newProject = {
-            id: Date.now().toString(),
-            title,
-            description,
-            github,
-            live,
-            image: imageDataUrl || ''
-        };
-        projects.push(newProject);
+
+        if (editingProjectId) {
+            // Update existing project
+            const idx = projects.findIndex(p => p.id === editingProjectId);
+            if (idx !== -1) {
+                projects[idx].title = title;
+                projects[idx].description = description;
+                projects[idx].github = github;
+                projects[idx].live = live;
+                if (imageDataUrl) projects[idx].image = imageDataUrl;
+            }
+        } else {
+            // Create new project
+            projects.push({
+                id: Date.now().toString(),
+                title,
+                description,
+                github,
+                live,
+                image: imageDataUrl || ''
+            });
+        }
+
         saveProjects(projects);
+        // Re-render projects section
+        document.querySelector('.pros').innerHTML = '';
         renderProjects();
         renderManageLists();
-        addProjectForm.reset();
+        resetProjectForm();
     }
 
     if (imageFile) {
@@ -246,18 +318,29 @@ addSkillForm.addEventListener('submit', (e) => {
     if (!title) return;
 
     const skills = loadSkills();
-    const newSkill = {
-        id: Date.now().toString(),
-        title,
-        description,
-        image
-    };
-    skills.push(newSkill);
-    saveSkills(skills);
 
+    if (editingSkillId) {
+        const idx = skills.findIndex(s => s.id === editingSkillId);
+        if (idx !== -1) {
+            skills[idx].title = title;
+            skills[idx].description = description;
+            if (image) skills[idx].image = image;
+        }
+    } else {
+        skills.push({
+            id: Date.now().toString(),
+            title,
+            description,
+            image
+        });
+    }
+
+    saveSkills(skills);
+    // Re-render skills section
+    document.querySelector('.cards').innerHTML = '';
     renderSkills();
     renderManageLists();
-    addSkillForm.reset();
+    resetSkillForm();
 });
 
 // Initialize on page load
