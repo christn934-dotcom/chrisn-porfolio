@@ -123,8 +123,8 @@ function renderProjects() {
                 <img src="${project.image || 'images/default-project.png'}" alt="${project.title}">
                 <p>${project.title}</p>
                 <div class="pro-links">
-                    ${project.github ? `<a href="${project.github}" class="btn-icon" target="_blank" rel="noopener">GitHub</a>` : ''}
-                    ${project.live ? `<a href="${project.live}" class="btn-icon btn-icon-fill" target="blank" rel="noopener">Live Preview</a>` : ''}
+                    <a href="${project.github || '#'}" class="btn-icon" target="_blank" rel="noopener">GitHub</a>
+                    <a href="${project.live || '#'}" class="btn-icon btn-icon-fill" target="_blank" rel="noopener">Live Preview</a>
                 </div>
             `;
             projectsSection.appendChild(proDiv);
