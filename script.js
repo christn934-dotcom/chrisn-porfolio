@@ -206,25 +206,34 @@ addProjectForm.addEventListener('submit', (e) => {
     const description = document.getElementById('projectDescription').value.trim();
     const github = document.getElementById('projectGithub').value.trim();
     const live = document.getElementById('projectLive').value.trim();
-    const image = document.getElementById('projectImage').value.trim();
+    const imageFile = document.getElementById('projectImage').files[0];
 
     if (!title) return;
 
-    const projects = loadProjects();
-    const newProject = {
-        id: Date.now().toString(),
-        title,
-        description,
-        github,
-        live,
-        image
-    };
-    projects.push(newProject);
-    saveProjects(projects);
+    function saveProject(imageDataUrl) {
+        const projects = loadProjects();
+        const newProject = {
+            id: Date.now().toString(),
+            title,
+            description,
+            github,
+            live,
+            image: imageDataUrl || ''
+        };
+        projects.push(newProject);
+        saveProjects(projects);
+        renderProjects();
+        renderManageLists();
+        addProjectForm.reset();
+    }
 
-    renderProjects();
-    renderManageLists();
-    addProjectForm.reset();
+    if (imageFile) {
+        const reader = new FileReader();
+        reader.onload = (ev) => saveProject(ev.target.result);
+        reader.readAsDataURL(imageFile);
+    } else {
+        saveProject('');
+    }
 });
 
 // Add skill form submission
